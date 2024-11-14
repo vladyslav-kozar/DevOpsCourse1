@@ -1,8 +1,3 @@
-install terraform (https://developer.hashicorp.com/terraform/install)
-install azure-cli (https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build)
-
-
-
-best practices:
-https://www.terraform-best-practices.com/
-    
+1) Private key part added to the variables.
+2) New keys attached - name -> ck
+3) Subscription field from provider "azurerm" deleted. Enter yours subscription_id = "<id>" to test with Azure account.

@@ -9,7 +9,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = ""
+  subscription_id = "aab380c1-3231-48a0-9116-3ba414023e17"
 }
 
 # Resourse groupe create
@@ -52,6 +52,20 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "95.46.143.103/32"
     destination_address_prefix = "*"
   }
+  
+# http 
+  security_rule {
+    name                       = "http"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+  
 }
 
 # Connect subnet and NSG
@@ -95,7 +109,7 @@ resource "azurerm_lb" "lb" {
 resource "azurerm_lb_probe" "prb" {
   loadbalancer_id = azurerm_lb.lb.id
   name            = "ssh-running-probe"
-  port            = 22
+  port            = 80
   protocol        = "Tcp"
   interval_in_seconds = 5
   number_of_probes    = 2
@@ -112,8 +126,8 @@ resource "azurerm_lb_rule" "lbrule" {
   loadbalancer_id                = azurerm_lb.lb.id
   name                           = "LBRule"
   protocol                       = "Tcp"
-  frontend_port                  = 22
-  backend_port                   = 22
+  frontend_port                  = 80
+  backend_port                   = 80
   frontend_ip_configuration_name = "LBIPAddress"
   probe_id                       = azurerm_lb_probe.prb.id
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.lbpool.id]
@@ -129,6 +143,7 @@ resource "azurerm_lb_nat_rule" "natr" {
   frontend_port_start            = 2200
   frontend_port_end              = 2201
   backend_port                   = 22
+  enable_floating_ip             = "true"
   backend_address_pool_id        = azurerm_lb_backend_address_pool.lbpool.id
   frontend_ip_configuration_name = "LBIPAddress"
 }

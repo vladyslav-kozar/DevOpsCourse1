@@ -1,0 +1,6 @@
+Please add your subscription ID for test in the next block in the main file:
+
+provider "azurerm" {
+  features {}
+  subscription_id = ""
+}

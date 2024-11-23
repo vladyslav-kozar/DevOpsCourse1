@@ -1,0 +1,12 @@
+1. For Terraform in general:
+Please add your subscription ID for test in the next block in the main file:
+
+provider "azurerm" {
+  features {}
+  subscription_id = ""
+}
+
+2. Terraform 1st HW is in the "TF" folder
+
+3. Jenkins Freestyle project HW info:
+- Access to VMs limited to specific IP address

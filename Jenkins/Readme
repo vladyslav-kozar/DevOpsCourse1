@@ -1,12 +1,5 @@
-1. For Terraform in general:
-Please add your subscription ID for test in the next block in the main file:
+Jenkins Freestyle project HW info:
 
-provider "azurerm" {
-  features {}
-  subscription_id = ""
-}
-
-2. Terraform 1st HW is in the "TF" folder
-
-3. Jenkins Freestyle project HW info:
 - Access to VMs limited to specific IP address
+
+- Before running any Jenkins jobs need to login to Azure CLI + add same subscription to the terraform main file in the field > subscription ""

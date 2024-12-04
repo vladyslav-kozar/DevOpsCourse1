@@ -1,0 +1,23 @@
+---
+- name: Show_ansible_the_best_via_nginx
+  hosts: test
+  gather_facts: no
+
+  tasks:
+    - name: download_nginx
+      command: apt install nginx -y
+      become: yes
+
+    - name: Copy a file from local to remote
+      copy:
+        src: /home/vlad/ansible/index.html
+        dest: /var/www/html/index.html
+      become: yes
+
+    - name: Check new index.html
+      command: curl localhost
+      register: result
+
+    - name: Show result
+      debug:
+        var: result.stdout

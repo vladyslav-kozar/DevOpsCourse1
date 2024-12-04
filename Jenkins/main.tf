@@ -53,10 +53,22 @@ resource "azurerm_network_security_group" "nsg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "ssh2"
+    priority                   = 1002
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "4.180.59.55/32"
+    destination_address_prefix = "*"
+  }
+
 # http 
   security_rule {
     name                       = "http"
-    priority                   = 1002
+    priority                   = 1003
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -65,19 +77,7 @@ resource "azurerm_network_security_group" "nsg" {
     source_address_prefix      = "95.46.143.103/32"
     destination_address_prefix = "*"
   }
-  
-# http 2
-  security_rule {
-    name                       = "http2"
-    priority                   = 1003
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "8080"
-    source_address_prefix      = "95.46.143.103/32"
-    destination_address_prefix = "*"
-  }
+
   
 }
 
@@ -89,14 +89,14 @@ resource "azurerm_subnet_network_security_group_association" "subnet_nsg_associa
 
 # IP 
 resource "azurerm_public_ip" "pip1" {
-  name                = "IPForLB-pip"
+  name                = "pip1"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
 }
 
 resource "azurerm_public_ip" "pip2" {
-  name                = "IPForLB-pip"
+  name                = "pip2"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -184,5 +184,9 @@ resource "azurerm_linux_virtual_machine" "vm2" {
 
 # Output the Public IP of the Load Balancer
 output "azurerm_public_ip" {
-  value = [azurerm_public_ip.pip1, azurerm_public_ip.pip2]
+  value = join("\n", [
+    "[test]",
+    azurerm_public_ip.pip1.ip_address,
+    azurerm_public_ip.pip2.ip_address
+  ])
 }

@@ -1,0 +1,25 @@
+---
+- name: Install_doker
+  hosts: test
+  gather_facts: no
+
+  tasks:
+    - name: download_script
+      command: curl -fsSL https://get.docker.com -o get-docker.sh
+      become: yes
+
+    - name: install_doker
+      command: sh get-docker.sh
+      become: yes
+
+    - name: start_doker
+      command: systemctl start docker
+      become: yes
+
+    - name: check_doker
+      command: systemctl status docker
+      register: result
+
+    - name: Show result
+      debug:
+        var: result.stdout
